@@ -32,22 +32,15 @@ def repeat(msg, ch):
 def convert(num, ch):
     num = num.split('PRIVMSG',1)[1].split(':',1)[1]
     num = num.split('@convert',1)[1].split(' ',1)[1]
-    type = 0
     try:
       int(num,10)
-      type = 1
+      IRCSocket.send(bytes("PRIVMSG "+ ch +" :"+ hex(int(num)) +"\n", "UTF-8"))
     except ValueError:
       try:
         int(num,16)
-        type = 2
+        IRCSocket.send(bytes("PRIVMSG "+ ch +" :"+ str(int(num,16)) +"\n", "UTF-8"))
       except ValueError:
-        type = 0;
-    if type == 1:
-      IRCSocket.send(bytes("PRIVMSG "+ ch +" :"+ hex(int(num)) +"\n", "UTF-8"))
-    elif type == 2:
-      IRCSocket.send(bytes("PRIVMSG "+ ch +" :"+ str(int(num,16)) +"\n", "UTF-8"))
-    elif type == 0:
-      IRCSocket.send(bytes("PRIVMSG "+ ch +" :"+ "Please input decimal or hexadecimal." +"\n", "UTF-8"))
+        IRCSocket.send(bytes("PRIVMSG "+ ch +" :"+ "Please input decimal or hexadecimal." +"\n", "UTF-8")) 
 
 def validate(ip):
     try:
